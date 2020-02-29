@@ -1,0 +1,39 @@
+{
+  "name": "@kasperskei/orm",
+  "version": "0.0.1",
+  "main": "dist/orm.js",
+  "unpkg": "dist/orm.min.js",
+  "author": "kasperskei <kasperskei@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kasperskei/orm.git"
+  },
+  "keywords": [
+    "orm"
+  ],
+  "homepage": "https://todo.com",
+  "bugs": "https://github.com/kasperskei/orm/issues",
+  "files": [
+    "dist/orm.min.js"
+  ],
+  "scripts": {
+    "serve": "parcel example/index.html",
+    "build": "yarn clean && yarn build:normal && yarn build:min",
+    "build:normal": "parcel build src/index.js --out-file orm.min.js --experimental-scope-hoisting --detailed-report",
+    "build:min": "parcel build src/index.js --out-file orm.js --experimental-scope-hoisting --no-minify",
+    "clean": "rm -rf dist && rm -rf .cache",
+    "lint": "eslint --fix --ext js ."
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.6",
+    "@babel/plugin-proposal-pipeline-operator": "^7.8.3",
+    "@babel/plugin-proposal-private-methods": "^7.8.3",
+    "@babel/preset-env": "^7.8.6",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "parcel-bundler": "^1.12.4"
+  }
+}
