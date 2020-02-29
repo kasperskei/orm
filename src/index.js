@@ -1,2 +1,2 @@
 export { default as Model } from './Model'
-export { default as createDatabase } from './Database'
+export { default as createDatabase } from './createDatabase'

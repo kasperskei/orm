@@ -6,14 +6,13 @@ import defineRead from './defineRead'
 import defineRelationship from './defineRelationship'
 import defineSource from './defineSource'
 
-const createDatabase = (...modelList) => {
+const createDatabase = (models) => {
   const db = {
     entities: {},
     models: {},
   }
 
-  modelList
-    .flat()
+  models
     .map((model) => {
       db.entities[model.name] = new Map()
       db.models[model.name] = model

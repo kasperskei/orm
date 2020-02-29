@@ -4,7 +4,7 @@ const defineSource = (db, model) => Object.defineProperties(model, {
   },
 
   fields: {
-    value: Object.entries(model.fields)
+    value: Object.entries(model.fields ?? {})
       .reduce((acc, [field, options]) => {
         acc[field] = {
           field,

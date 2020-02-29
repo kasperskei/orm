@@ -23,6 +23,7 @@ const defineUpdate = (db, model) => {
       const addForeignKey = createAddValue(foreignModel.fields[foreignField].isEnum)
       const removeForeignKey = createRemoveValue(foreignModel.fields[foreignField].isEnum)
       const getForeignKeyList = createGetValueList(isEnum)
+      const foreignSource = db.entities[foreignModel.name]
 
       acc[field] = (instance, data) => {
         if (!(field in data)) return
@@ -37,7 +38,7 @@ const defineUpdate = (db, model) => {
 
         foreignKeyListRemoved
           .forEach((foreignKey) => {
-            const foreignInstance = db.entities[foreignModel.name].get(foreignKey)
+            const foreignInstance = foreignSource.get(foreignKey)
             if (foreignInstance !== undefined) {
               removeForeignKey(foreignInstance, foreignField, instance.id)
             }
@@ -45,7 +46,7 @@ const defineUpdate = (db, model) => {
 
         foreignKeyListAdded
           .forEach((foreignKey) => {
-            const foreignInstance = db.entities[foreignModel.name].get(foreignKey)
+            const foreignInstance = foreignSource.get(foreignKey)
             if (foreignInstance !== undefined) {
               addForeignKey(foreignInstance, foreignField, instance.id)
             }
