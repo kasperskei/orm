@@ -7,7 +7,7 @@ import createGetValueList from './utils/createGetValueList'
 import createRemoveValue from './utils/createRemoveValue'
 import getDiffArray from './utils/getDiffArray'
 
-const defineUpdate = (model) => {
+const defineUpdate = (db, model) => {
   const fieldList = Object.values(model.fields).filter((it) => !it.isForeignEntity)
   // const foreignEntityList = fieldList.filter((it) => it.isForeignEntity)
   // const foreignKeyList = fieldList.filter((it) => it.isForeignKey)
@@ -37,7 +37,7 @@ const defineUpdate = (model) => {
 
         foreignKeyListRemoved
           .forEach((foreignKey) => {
-            const foreignInstance = foreignModel.source.get(foreignKey)
+            const foreignInstance = db.entities[foreignModel.name].get(foreignKey)
             if (foreignInstance !== undefined) {
               removeForeignKey(foreignInstance, foreignField, instance.id)
             }
@@ -45,7 +45,7 @@ const defineUpdate = (model) => {
 
         foreignKeyListAdded
           .forEach((foreignKey) => {
-            const foreignInstance = foreignModel.source.get(foreignKey)
+            const foreignInstance = db.entities[foreignModel.name].get(foreignKey)
             if (foreignInstance !== undefined) {
               addForeignKey(foreignInstance, foreignField, instance.id)
             }
@@ -57,10 +57,10 @@ const defineUpdate = (model) => {
 
   Object.defineProperty(model, 'update', {
     value(...dataList) {
-      // .map((data) => model.source.get(data.id))
+      // .map((data) => db.entities[model.name].get(data.id))
       // .filter((instance) => instance !== undefined)
       dataList.flat().forEach((data) => {
-        const instance = model.source.get(data.id)
+        const instance = db.entities[model.name].get(data.id)
 
         if (instance === undefined) return
 
@@ -88,8 +88,8 @@ const defineUpdate = (model) => {
         //     const newValue = data[field]
 
         //     if (isForeignEntity) {
-        //       const foreignInstance = foreignModel.source.get(newValue.id)
-        //       const instanceOfForeign = model.source.get(foreignInstance[foreignField])
+        //       const foreignInstance = db.entities[foreignModel.name].get(newValue.id)
+        //       const instanceOfForeign = db.entities[model.name].get(foreignInstance[foreignField])
 
         //       if (localField !== undefined && instance[localField] === undefined) {
         //         instance[localField] = newValue.id
@@ -114,7 +114,7 @@ const defineUpdate = (model) => {
         //       const getForeignKeyList = createGetValueList(isEnum)
 
         //       const getInstanceList = (keyList) => keyList
-        //         .map((foreignKey) => foreignModel.source.get(foreignKey))
+        //         .map((foreignKey) => db.entities[foreignModel.name].get(foreignKey))
         //         .filter((foreignInstance) => foreignInstance !== undefined)
 
         //       const [

@@ -1,4 +1,4 @@
-import { Database } from '../src'
+import { createDatabase } from '../src'
 
 import First from './models/First'
 import Second from './models/Second'
@@ -7,7 +7,7 @@ import Fourth from './models/Fourth'
 import Fifth from './models/Fifth'
 
 
-const database = new Database(First, Second, Third, Fourth, Fifth)
+const database = createDatabase(First, Second, Third, Fourth, Fifth)
 
 /**
  * Добавление нормализованных данных
@@ -258,119 +258,18 @@ window.Third = Third
 window.Fourth = Fourth
 window.Fifth = Fifth
 
-window.first = First.get(4)
-window.second = Second.get(4)
-window.third = Third.get(4)
-window.fourth = Fourth.get(4)
-window.fifth = Fifth.get(4)
+// window.first = First.get(4)
+// window.second = Second.get(4)
+// window.third = Third.get(4)
+// window.fourth = Fourth.get(4)
+// window.fifth = Fifth.get(4)
 
 window.database = database
 
 
 // First.get(4).delete()
-first.update({ id: 5, secondId: 2 })
+// first.update({ id: 5, secondId: 2 })
 
 console.log(database)
 Object.entries(database.entities)
   .forEach(([name, entity]) => console.log(name, Array.from(entity.values())))
-
-
-// const xxx = new Map()
-// const yyy = []
-const len = 1000000
-
-// for (let i = 0; i < len; i++) {
-//   xxx.set(i, i)
-//   yyy.push({ id: i })
-// }
-
-const timer = (func) => {
-  const t0 = performance.now()
-  func()
-  const t1 = performance.now()
-  return t1 - t0
-}
-
-// const x = [...xxx.values()]
-// Array.from(xxx.values())
-
-// timer(() => {
-//   for (let i = 0; i < len; i++) {
-//     yyy.find(it => it.id === i)
-//   }
-// }) |> console.log
-
-// timer(() => {
-//   for (let i = 0; i < len; i++) {
-//     yyy[xxx.get(i)]
-//   }
-// }) |> console.log
-
-// timer(() => {
-//   for (let i = 0; i < len; i++) {
-//     xxx.get(i)
-//   }
-// }) |> console.log
-
-// timer(() => {
-//   for (let i = 0; i < len; i++) {
-//     yyy[i]
-//   }
-// }) |> console.log
-
-
-// const xxx = new Map()
-// for (let i = 0; i < len; i++) {
-//   xxx.set(i, { id: i })
-// }
-// const yyy = { xxx }
-
-// timer(() => {
-//   [...xxx.keys()]
-//     .map((foreignKey) => xxx.get(foreignKey))
-//     .filter((foreignInstance) => foreignInstance !== undefined)
-//     .forEach((foreignInstance) => 1 + 1)
-// }) |> console.log
-
-// timer(() => {
-//   [...xxx.keys()]
-//     .forEach((foreignKey) => {
-//       const foreignInstance = xxx.get(foreignKey)
-//       if (foreignInstance !== undefined) {
-//         1 + 1
-//       }
-//     })
-// }) |> console.log
-
-// timer(() => {
-//   [...xxx.values()]
-//     .filter((foreignInstance) => foreignInstance !== undefined)
-//     .forEach((foreignInstance) => 1 + 1)
-// }) |> console.log
-
-// timer(() => {
-//   [...xxx.values()]
-//     .forEach((foreignInstance) => {
-//       if (foreignInstance !== undefined) {
-//         1 + 1
-//       }
-//     })
-// }) |> console.log
-
-// timer(() => {
-//   [...xxx.values()]
-//     .forEach((foreignInstance) => {
-//       if (foreignInstance !== undefined) {
-//         1 + 1
-//       }
-//     })
-// }) |> console.log
-
-// timer(() => {
-//   xxx
-//     .forEach((foreignInstance) => {
-//       if (foreignInstance !== undefined) {
-//         1 + 1
-//       }
-//     })
-// }) |> console.log

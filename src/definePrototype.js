@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-const definePrototype = (model) => Object.defineProperties(model.prototype, {
+const definePrototype = (db, model) => Object.defineProperties(model.prototype, {
   // clone: {
   //   value() {
   //     return new model(this)

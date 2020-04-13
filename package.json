@@ -15,7 +15,7 @@
   "homepage": "https://todo.com",
   "bugs": "https://github.com/kasperskei/orm/issues",
   "files": [
-    "dist/orm.min.js"
+    "dist"
   ],
   "scripts": {
     "serve": "parcel example/index.html",

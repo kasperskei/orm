@@ -6,32 +6,34 @@ import defineRead from './defineRead'
 import defineRelationship from './defineRelationship'
 import defineSource from './defineSource'
 
-class Database {
-  constructor(...modelList) {
-    this.entities = {}
-    this.models = {}
-
-    modelList
-      .flat()
-      .map((model) => {
-        this.entities[model.name] = new Map()
-        this.models[model.name] = model
-        return model
-      })
-      .map((model) => {
-        defineSource(this)(model)
-        return model
-      })
-      .map((model) => {
-        defineCreate(model)
-        defineRead(model)
-        defineUpdate(model)
-        defineDelete(model)
-        definePrototype(model)
-        defineRelationship(model)
-        return model
-      })
+const createDatabase = (...modelList) => {
+  const db = {
+    entities: {},
+    models: {},
   }
+
+  modelList
+    .flat()
+    .map((model) => {
+      db.entities[model.name] = new Map()
+      db.models[model.name] = model
+      return model
+    })
+    .map((model) => {
+      defineSource(db, model)
+      return model
+    })
+    .map((model) => {
+      defineCreate(db, model)
+      defineRead(db, model)
+      defineUpdate(db, model)
+      defineDelete(db, model)
+      definePrototype(db, model)
+      defineRelationship(db, model)
+      return model
+    })
+
+  return db
 }
 
-export default Database
+export default createDatabase

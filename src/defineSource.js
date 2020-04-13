@@ -1,4 +1,4 @@
-const defineSource = (db) => (model) => Object.defineProperties(model, {
+const defineSource = (db, model) => Object.defineProperties(model, {
   source: {
     value: db.entities[model.name],
   },

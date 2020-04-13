@@ -1,30 +1,30 @@
 /* eslint-disable func-names */
-const getInstanceByLocalKey = (foreignModel, localField) => function () {
-  return foreignModel.source.get(this[localField])
+const getInstanceByLocalKey = (db, foreignModel, localField) => function () {
+  return db.entities[foreignModel.name].get(this[localField])
 }
-const getInstanceListByLocalKey = (foreignModel, localField) => function () {
-  return this[localField].map((foreignKey) => foreignModel.source.get(foreignKey))
+const getInstanceListByLocalKey = (db, foreignModel, localField) => function () {
+  return this[localField].map((foreignKey) => db.entities[foreignModel.name].get(foreignKey))
 }
 
-const getInstanceByRelationKey = (foreignModel, foreignField) => function () {
-  return [...foreignModel.source.values()]
+const getInstanceByRelationKey = (db, foreignModel, foreignField) => function () {
+  return [...db.entities[foreignModel.name].values()]
     .find((foreignInstance) => foreignInstance[foreignField] === this.id)
 }
-const getInstanceByRelationKeyList = (foreignModel, foreignField) => function () {
-  return [...foreignModel.source.values()]
+const getInstanceByRelationKeyList = (db, foreignModel, foreignField) => function () {
+  return [...db.entities[foreignModel.name].values()]
     .find((foreignInstance) => foreignInstance[foreignField].includes(this.id))
 }
 
-const getInstanceListByRelationKey = (foreignModel, foreignField) => function () {
-  return [...foreignModel.source.values()]
+const getInstanceListByRelationKey = (db, foreignModel, foreignField) => function () {
+  return [...db.entities[foreignModel.name].values()]
     .filter((foreignInstance) => foreignInstance[foreignField] === this.id)
 }
-const getInstanceListByRelationKeyList = (foreignModel, foreignField) => function () {
-  return [...foreignModel.source.values()]
+const getInstanceListByRelationKeyList = (db, foreignModel, foreignField) => function () {
+  return [...db.entities[foreignModel.name].values()]
     .filter((foreignInstance) => foreignInstance[foreignField].includes(this.id))
 }
 
-const defineRelationship = (model) => Object.defineProperties(
+const defineRelationship = (db, model) => Object.defineProperties(
   model.prototype,
   Object.values(model.fields)
     .filter((it) => it.isForeignEntity)
@@ -41,21 +41,21 @@ const defineRelationship = (model) => Object.defineProperties(
       if (localField !== undefined) {
         acc[field] = {
           get: !isEnum
-            ? getInstanceByLocalKey(foreignModel, localField)
-            : getInstanceListByLocalKey(foreignModel, localField),
+            ? getInstanceByLocalKey(db, foreignModel, localField)
+            : getInstanceListByLocalKey(db, foreignModel, localField),
         }
       } else if (foreignField !== undefined) {
         if (!foreignModel.fields[foreignField].isEnum) {
           acc[field] = {
             get: !isEnum
-              ? getInstanceByRelationKey(foreignModel, foreignField)
-              : getInstanceListByRelationKey(foreignModel, foreignField),
+              ? getInstanceByRelationKey(db, foreignModel, foreignField)
+              : getInstanceListByRelationKey(db, foreignModel, foreignField),
           }
         } else {
           acc[field] = {
             get: !isEnum
-              ? getInstanceByRelationKeyList(foreignModel, foreignField)
-              : getInstanceListByRelationKeyList(foreignModel, foreignField),
+              ? getInstanceByRelationKeyList(db, foreignModel, foreignField)
+              : getInstanceListByRelationKeyList(db, foreignModel, foreignField),
           }
         }
       } else if (process.env.NODE_ENV === 'development') {

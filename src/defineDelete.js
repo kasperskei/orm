@@ -2,7 +2,7 @@
 import createHasValue from './utils/createHasValue'
 import createRemoveValue from './utils/createRemoveValue'
 
-const defineDelete = (model) => {
+const defineDelete = (db, model) => {
   const removeRelationshipList = Object.values(model.fields)
     .filter(({ isForeignKey, foreignField }) => isForeignKey && foreignField !== undefined)
     .map(({
@@ -12,14 +12,14 @@ const defineDelete = (model) => {
       const hasForeignKey = createHasValue(foreignModel.fields[foreignField].isEnum)
       const removeForeignKey = createRemoveValue(foreignModel.fields[foreignField].isEnum)
 
-      return (id) => foreignModel.source
+      return (id) => db.entities[foreignModel.name]
         .forEach((foreignInstance) => {
           if (hasForeignKey(id)) {
             removeForeignKey(foreignInstance, foreignField, id)
           }
         })
 
-      // return (id) => [...foreignModel.source.values()]
+      // return (id) => [...db.entities[foreignModel.name].values()]
       //   .filter((foreignInstance) => hasForeignKey(foreignInstance, foreignField, id))
       //   .forEach((foreignInstance) => removeForeignKey(foreignInstance, foreignField, id))
     })
@@ -32,14 +32,14 @@ const defineDelete = (model) => {
           // .map((data) => (data instanceof model ? data.id : data))
           .forEach((id) => {
             removeRelationshipList.forEach((remove) => remove(id))
-            model.source.delete(id)
+            db.entities[model.name].delete(id)
           })
       },
     },
 
     deleteAll: {
       value() {
-        return model.delete(...model.source.keys())
+        return model.delete(...db.entities[model.name].keys())
       },
     },
   })

@@ -5,7 +5,7 @@
 import createAddValue from './utils/createAddValue'
 import createGetValueList from './utils/createGetValueList'
 
-const defineCreate = (model) => {
+const defineCreate = (db, model) => {
   // const fieldList = Object.values(model.fields)
   // const foreignEntityList = fieldList.filter((it) => it.isForeignEntity)
   // const foreignKeyList = fieldList.filter((it) => it.isForeignKey)
@@ -70,12 +70,12 @@ const defineCreate = (model) => {
 
       return (data) => getForeignKeyList(data, field)
         .forEach((foreignKey) => {
-          const foreignInstance = foreignModel.source.get(foreignKey)
+          const foreignInstance = db.entities[foreignModel.name].get(foreignKey)
           if (foreignInstance !== undefined) {
             addForeignKey(foreignInstance, foreignField, data.id)
           }
         })
-        // .map((foreignKey) => foreignModel.source.get(foreignKey))
+        // .map((foreignKey) => db.entities[foreignModel.name].get(foreignKey))
         // .filter((foreignInstance) => foreignInstance !== undefined)
         // .forEach((foreignInstance) => addForeignKey(foreignInstance, foreignField, target.id))
     })
@@ -87,7 +87,7 @@ const defineCreate = (model) => {
         .forEach((data) => {
           // addRelationshipDataList.forEach((add) => add(data))
           addRelationshipList.forEach((add) => add(data))
-          model.source.set(data.id, new model(data))
+          db.entities[model.name].set(data.id, new model(data))
         })
     },
   })

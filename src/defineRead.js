@@ -1,37 +1,37 @@
-const defineRead = (model) => Object.defineProperties(model, {
+const defineRead = (db, model) => Object.defineProperties(model, {
   size: {
     get() {
-      return model.source.size
+      return db.entities[model.name].size
     },
   },
 
   keys: {
     get() {
-      return [...model.source.keys()]
+      return [...db.entities[model.name].keys()]
     },
   },
 
   values: {
     get() {
-      return [...model.source.values()]
+      return [...db.entities[model.name].values()]
     },
   },
 
   entries: {
     get() {
-      return [...model.source.entries()]
+      return [...db.entities[model.name].entries()]
     },
   },
 
   get: {
     value(primaryKey) {
-      return model.source.get(primaryKey)
+      return db.entities[model.name].get(primaryKey)
     },
   },
 
   has: {
     value(primaryKey) {
-      return model.source.has(primaryKey)
+      return db.entities[model.name].has(primaryKey)
     },
   },
 })
